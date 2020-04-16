@@ -1,1 +1,2 @@
-as_=list(map(int,input().split()))
+#l={111:1,211:3,221:5,222:,311:,321:,322:,331:,332:,333:}
+print(l[int(input().replace(' ', ''))])
