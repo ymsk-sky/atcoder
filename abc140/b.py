@@ -1,0 +1,6 @@
+n=int(input())
+as_=list(map(int,input().split()))
+bs=list(map(int,input().split()))
+cs=list(map(int,input().split()))
+p=sum(bs)+sum([cs[a-1] for a,a_ in zip(as_,as_[1:]) if a+1==a_])
+print(p)
