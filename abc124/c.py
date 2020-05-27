@@ -1,0 +1,5 @@
+s=input()
+a=int('0b'+s, 0)
+b=int('0b'+''.join(['0' if i%2==0 else '1' for i in range(len(s))]), 0)
+c=b^int('0b'+'1'*len(s), 0)
+print(min(bin(a^b).count('1'),bin(a^c).count('1')))
