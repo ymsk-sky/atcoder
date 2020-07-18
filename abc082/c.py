@@ -1,11 +1,15 @@
 n=int(input())
 l=list(map(int,input().split()))
-s=set(l)
-a=0
-for v in s:
-    c=l.count(v)
-    if v<=c:
-        a+=c-v
+d=dict()
+for v in l:
+    if v in d:
+        d[v]+=1
     else:
-        a+=c
-print(a)
+        d[v]=1
+c=0
+for k, v in d.items():
+    if k<=v:
+        c+=v-k
+    else:
+        c+=v
+print(c)
