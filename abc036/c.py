@@ -12,19 +12,3 @@ for i,k in enumerate(sorted(d.keys())):
         s[a]=i
 for v in s:
     print(v)
-"""
-5
-
-3
-3
-1
-6
-1
-
-1
-1
-0
-2
-0
-
-"""
