@@ -1,17 +1,17 @@
-n=int(input())
 """
 a*b + c = n
 を満たすa,b,c(正整数)は何組
 
-a*b = n-c
-a*b = v
+a*b < n
+となる(a,b)の組に対する
+a*b + c = n
+のcは一意に決まる(ひとつのみ存在する)ため
+a*b < n
+を考えればよい
+aを固定として1~(n-1)まで全探索する
 """
-s=0
-for c in range(1,n):
-    v=n-c
-    for b in range(1,v+1):
-        a=v/b
-        if a%1==0:
-            s+=1
-        #print('a={} b={} c={}'.format(a,b,c))
-print(s)
+n=int(input())
+ans=0
+for a in range(1,n):
+    ans+=(n-1)//a
+print(ans)
