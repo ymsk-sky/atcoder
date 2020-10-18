@@ -1,20 +1,13 @@
-# ans: 二分探索, 10億以下
-a,b,x=map(int,input().split()) # 10 7 100
-ans=1_000_000_000
-k=len(str(ans)) #10
-i=0
-while i<10:
-    sum_=a*ans+b*k
-    if sum_==x:
-        break
-    elif sum_>x:
-        ans//=2
-        k=len(str(ans))
+a,b,x=map(int,input().split())
+l=0  # 下限
+r=10**9+1  # 上限
+m=0
+while r-l>1:
+    m=(l+r)//2
+    d=len(str(m))
+    v=a*m+b*d
+    if v>x:
+        r=m
     else:
-        ans+=ans//2
-        k=len(str(ans))
-    if sum_<=0:
-        print(0)
-        exit()
-    i+=1
-print(ans)
+        l=m
+print(l)
