@@ -1,16 +1,15 @@
+"""
+最小パイプをイメージ
+水が15L/s流れるパイプと12L/sのパイプを繋げた場合、
+全体では12L/sとなる。
+
+最小の交通機関 * 回数 + その交通機関を使っていない時間が答えとなる
+"""
+from math import ceil
 n=int(input())
-moves=[0]+[int(input()) for _ in range(5)]
-holds=[n]+[0]*5
-t=0
-while 1:
-    for i in range(5,0,-1):
-        if holds[i-1]-moves[i]>=0:
-            trans=moves[i]
-        else:
-            trans=holds[i-1]
-        holds[i-1]-=trans
-        holds[i]+=trans
-    t+=1
-    if holds[-1]==n:
-        break
-print(t)
+a=int(input())
+b=int(input())
+c=int(input())
+d=int(input())
+e=int(input())
+print(ceil(n/min(a,b,c,d,e))+4)
