@@ -1,16 +1,25 @@
 n=int(input())
 s=input()
-v=0
-for i,c in enumerate(s):
-    if c=='W':
-        v+=(2**(n-i-1))
-u=(2**n)-1
-m=float('inf')
-for i in range(n):
-    v2=bin(v)[2:].zfill(n)
-    u2=bin(u)[2:].zfill(n)
-    v3=int(v2[:i]+v2[i+1:],2)
-    u3=int(u2[:i]+u2[i+1:],2)
-    m=min(m,bin(v3^u3).count('1'))
-    u>>=1
-print(m)
+ans=float('inf')
+es=s.count('E')
+changed=0
+for c in s:
+    cnt=es
+    if c=='E':
+        cnt-=1
+    else:
+        changed+=1
+    ans=min(ans,cnt)
+print(ans)
+"""
+5
+WEEWW
+E(East:東[右])
+W(West:西[左])
+
+1 0EEWW -> 0WWWW = 2
+2 W0EWW -> E0WWW = 1
+3 WE0WW -> EE0WW = 1
+4 WEE0W -> EEE0W = 1
+5 WEEW0 -> EEEE0 = 2
+"""
