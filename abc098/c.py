@@ -1,14 +1,19 @@
+"""思考
+初期状態を全員西向きにする => 東向きの人数 が変化数(答え)
+この状態からリーダーの位置を右にずらしていく
+"""
 n=int(input())
 s=input()
 ans=float('inf')
-es=s.count('E')
-changed=0
+rs=s.count('E')  # リーダーより右側(東側)の"変化人数"
+ls=0  # リーダーより左側(西側)の"変化人数"
 for c in s:
-    cnt=es
+    cnt=rs+ls
     if c=='E':
         cnt-=1
+        rs-=1
     else:
-        changed+=1
+        ls+=1
     ans=min(ans,cnt)
 print(ans)
 """
