@@ -1,22 +1,20 @@
 n=int(input())
-l=list(map(int,input().split()))
-mt=0
-ma=0
-for i in range(n-1):
-    r=l[i:]
-    for j in range(2,len(r)+1):
-        z=r[:j]
-        x=sum(z[0::2]) # takahashi
-        y=sum(z[1::2]) # aoki
-        print('(t,a)=({},{})'.format(x,y))
-        if ma<y:
-            ma=y
-            mt=x
-print(mt)
-
-"""
-6
-1 -3 3 9 1 6
-i=0
-j=5
-"""
+s=list(map(int,input().split()))
+ans=-float('inf')
+for i in range(n):  # takahashi select
+    max_t=-float('inf')
+    max_a=-float('inf')
+    for j in range(n):  # aoki select
+        if i==j:
+            continue
+        if i<j:
+            t=s[i:j+1]
+        else:
+            t=s[j:i+1]
+        point_t=sum(t[0::2])
+        point_a=sum(t[1::2])
+        if point_a>max_a:
+            max_a=point_a
+            max_t=point_t
+    ans=max(ans,max_t)
+print(ans)
