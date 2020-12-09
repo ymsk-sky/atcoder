@@ -12,16 +12,33 @@ for i in range(n):
         if i==j:
             break
         j=ps[j]-1  # 次のインデックスを更新
-print(scores)
+ans=-float('inf')
+for score in scores:
+    l=len(score)  # 一周の長さ
+    if l>=k:
+        ans=max(ans,max(score[:k]))
+    else:
+        max_val=max(score)
+        num=k//l  # 繰り返し回数
+        mod=k%l  # 端数部分
+        tail=score[-1]  # 繰り返すごとに増える数
+        if tail>0:  # 最大まで繰り返す
+            max_val+=tail*(num-1)
+            ans=max(ans,max_val,max([s+tail*num for s in score[:mod]]))
+        else:  # １回目で終わらせる
+            ans=max(ans,max_val)
+print(ans)
 """
 5 2
 2 4 5 1 3
 3 4 -10 -8 8
 8
 
-1: +4 -4 -1
+1: +4 -4 -1 | +3 -5 -2 | +2 -6 -3
 2: -8 -5 -1
-3: +8 -2 +6
+3: +8 -2 | +6 -4 | +4 -6
 4: +3 +7 -1
-5: -10 -2 -12
+5: -10 -2
+
++1 -2 +2 | +3 0 +4 | +5 +2 +6
 """
