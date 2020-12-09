@@ -1,30 +1,27 @@
 n,k=map(int,input().split())
-ps=list(map(int,input().split()))  # 順列
-cs=list(map(int,input().split()))  # マスのスコア
-ans=0
-scores=[[0]*n]*n
+ps=list(map(int,input().split()))  # 1~nの順列
+cs=list(map(int,input().split()))  # 1~nに到着時のスコア
+scores=[[] for _ in range(n)]
 for i in range(n):
-    for _ in range(n):
-        j=ps[i]
-    scores[i][j]
+    j=ps[i]-1  # 次のインデックス
+    tmp=0  # 移動前のスコア
+    while 1:
+        c=cs[j]  # 移動時の加算スコア
+        tmp+=c
+        scores[i].append(tmp)  # スコアを更新
+        if i==j:
+            break
+        j=ps[j]-1  # 次のインデックスを更新
 print(scores)
 """
-n=3
-i: 0 1 2
-j: 0 1 2
-i+j: 0 1 2, 1 2 0, 2 0 1
-
 5 2
 2 4 5 1 3
 3 4 -10 -8 8
 8
 
-5 5
-2 3 4 5 1
--1 2 3 -3 2
-1: 2 5 2 4 3 | 5 8 5 7 6 |
-2: 3 0 2 1 3
-3: -3 -1 -2 0 3
-4: 2 1 3 6 3
-5: -1 1 4 1 3
+1: +4 -4 -1
+2: -8 -5 -1
+3: +8 -2 +6
+4: +3 +7 -1
+5: -10 -2 -12
 """
