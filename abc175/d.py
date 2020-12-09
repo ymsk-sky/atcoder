@@ -24,7 +24,7 @@ for score in scores:
         tail=score[-1]  # 繰り返すごとに増える数
         if tail>0:  # 最大まで繰り返す
             max_val+=tail*(num-1)
-            ans=max(ans,max_val,max([s+tail*num for s in score[:mod]]))
+            ans=max(ans,max_val,max(score[:mod])+tail*num)
         else:  # １回目で終わらせる
             ans=max(ans,max_val)
 print(ans)
