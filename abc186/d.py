@@ -1,14 +1,17 @@
 n=int(input())
-al=sorted(list(map(int,input().split())),reverse=True)
-l=[]
-b=al[0]
-for a in al[1:]:
-    l.append(abs(b-a))
-ans=0
-x=0
+al=sorted(list(map(int,input().split())))
 tmp=0
-for i in range(n-1):
-    ans+=sum(l[i:])-x*(n-i-1)
-    tmp+=l[i]-x
-    x=tmp
+ans=0
+for i,a in enumerate(al):
+    ans+=i*a-tmp
+    tmp+=a
 print(ans)
+
+"""
+5
+31 41 59 26 53
+al: 26 31 41 53 59
+
+0*26-0 0->26
+1*31-26 26->57
+"""
