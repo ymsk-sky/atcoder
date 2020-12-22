@@ -1,6 +1,8 @@
 """
 ABC038 - C 参考
 https://atcoder.jp/contests/abc038/tasks/abc038_c
+
+ABC130 D問題 - 部分数列がK以上となる部分の数え上げ
 """
 
 # 入力受付
