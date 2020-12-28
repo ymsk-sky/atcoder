@@ -1,3 +1,7 @@
+"""
+1<=i<=n-1のiを選択後、al[i],al[i+1]に-1をかける
+任意の回数上記を行なった後のalの合計の最大を求める
+"""
 n=int(input())
 al=list(map(int,input().split()))
 def do(i):
