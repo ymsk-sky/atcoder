@@ -5,24 +5,15 @@
 """
 n,k=map(int,input().split())
 s=input()
-s0=[len(x) for x in s.split('1') if not x=='']
-s1=[len(x) for x in s.split('0') if not x=='']
-k=min(k,len(s0))  # 1を0に反転する必要なし
 ans=0
-if s[0]!='1':
-    s1.insert(0,0)
-for i in range(len(s0)-k+1):
-    tmp=sum(s0[i:i+k])+sum(s1[i:i+k+1])
-    ans=max(ans,tmp)
-print(ans)
-"""
-14 2
-11101010110011
-s0=['0', '0', '0', '00']
-s1=['111', '1', '1', '11', '11']
-8
-
-s0=['0', '0', '0', '00']
-s1=['111', '1', '11', '1']
-011101011001
-"""
+cnt=0  # 反転した連続した0の部分列
+tmp=0
+r=0
+for l in range(n):
+    bef='-1'
+    while cnt<k:
+        if r==n:
+            break
+        tmp+=int(s[r])
+        if s[r]=='':
+            r+=1
