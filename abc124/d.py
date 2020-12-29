@@ -5,15 +5,25 @@
 """
 n,k=map(int,input().split())
 s=input()
+l=[]
+if s[0]!='1':
+    l.append(0)
+bef=s[0]
+cnt=1
+for v in s[1:]:
+    if v==bef:
+        cnt+=1
+    else:
+        l.append(cnt)
+        cnt=1
+    bef=v
+l.append(cnt)
 ans=0
-cnt=0  # 反転した連続した0の部分列
-tmp=0
-r=0
-for l in range(n):
-    bef='-1'
-    while cnt<k:
-        if r==n:
-            break
-        tmp+=int(s[r])
-        if s[r]=='':
-            r+=1
+for i in range(0,len(l),2):
+    ans=max(ans,sum(l[i:i+2*k+1]))
+print(ans)
+"""
+14 2
+11101010110011
+3 1 1 1 1 1 2 2 2
+"""
