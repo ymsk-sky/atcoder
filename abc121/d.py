@@ -17,3 +17,24 @@ n XOR (n+1) = 1
 ここで1 XOR 1 ... XOR 1については1が偶数個なら0,奇数個なら1となる
 """
 a,b=map(int,input().split())
+if b%2==0:
+    if (b//2)%2==0:
+        fb=0^b
+    else:
+        fb=1^b
+else:
+    if ((b+1)//2)%2==0:
+        fb=0
+    else:
+        fb=1
+if (a-1)%2==0:
+    if ((a-1)//2)%2==0:
+        fa=0^(a-1)
+    else:
+        fa=1^(a-1)
+else:
+    if (a//2)%2==0:
+        fa=0
+    else:
+        fa=1
+print(fa^fb)
