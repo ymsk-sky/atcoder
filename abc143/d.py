@@ -7,7 +7,6 @@ for i in range(n):
         a=l[i]
         b=l[j]
         k=bisect_left(l,a+b)
-        #c=l[j+1:k]
         tmp=k-(j+1)
         cnt+=tmp
 print(cnt)
