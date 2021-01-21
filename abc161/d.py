@@ -1,14 +1,11 @@
-# 間違い & 提出:LTE
-
+from collections import deque
 k=int(input())
-ls=[1,2,3,4,5,6,7,8,9,10,11,12]
-i=21
-while len(ls)<10**5:
-    si=str(i)
-    for s,n in zip(si, si[1:]):
-        if not abs(int(s)-int(n))<=1:
-            break
-        if n==si[-1]:
-            ls.append(i)
-    i+=1
-print(ls[k-1])
+q=deque([9-i for i in range(9)])
+for _ in range(k-1):
+    x=q.pop()
+    if x%10!=0:
+        q.appendleft(10*x+(x%10)-1)
+    q.appendleft(10*x+(x%10))
+    if x%10!=9:
+        q.appendleft(10*x+(x%10)+1)
+print(q.pop())
