@@ -1,13 +1,13 @@
-def a(n):
-    if n<2: return n
-    return n+a(n-1)
-N=int(input())
-As=list(map(int,input().split()))
-for i in range(len(As)):
-    sum_=0
-    l=As[:i]+As[i+1:]
-    m=list(set(l))
-    for f in m:
-        c=l.count(f)
-        sum_+=a(c-1)
-    print(sum_)
+from math import factorial
+def comb(n,r):
+    if n<2: return 0
+    return factorial(n)//(factorial(n-r)*factorial(r))
+n=int(input())
+l=list(map(int,input().split()))
+d={i:0 for i in range(1,n+1)}
+for a in l:
+    d[a]+=1
+base=sum([comb(v,2) for v in d.values()])
+for k in l:
+    ans=base-(d[k]-1)
+    print(ans)
