@@ -1,3 +1,6 @@
+"""
+Python3ではLTEだがPyPy3で通る.
+"""
 n=int(input())
 al=list(map(int,input().split()))
 ans=0
