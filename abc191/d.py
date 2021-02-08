@@ -1,38 +1,30 @@
 X,Y,R=map(float,input().split())
+M=10**4
+X=int(X*M)
+Y=int(Y*M)
+R=int(R*M)
 ans=0
-xl=int(X)
-xr=int(X)
+xmin=(X-R)//M*M
+xmax=(X+R)//M*M
+if xmin<0:
+    xmin+=M
+if xmax<0:
+    xmax+=M
 R2=R**2
-for y in range(int(Y-R),int(Y)+1):
-    while 1:
-        if (X-xl)**2+(Y-y)**2>R2:
-            xl+=1
-            break
-        else:
-            xl-=1
-    while 1:
-        if (X-xr)**2+(Y-y)**2>R2:
-            xr-=1
-            break
-        else:
-            xr+=1
-    tmp=xr-xl
-    cur=tmp+1 if tmp>0 else 0
-    ans+=cur
-xl-=1
-xr+=1
-for y in range(int(Y)+1,int(Y+R)+1):
-    while 1:
-        if (X-xl)**2+(Y-y)**2>R2:
-            break
-        else:
-            xl+=1
-    while 1:
-        if (X-xr)**2+(Y-y)**2>R2:
-            break
-        else:
-            xr-=1
-    tmp=xr-xl
-    cur=tmp+1 if tmp>0 else 0
-    ans+=cur
-print(ans)
+for x in range(xmin,xmax+1,10**4):
+    y=(R2-(X-x)**2)**(1/2)
+    ymin=(Y-y)//M*M
+    ymax=(Y+y)//M*M
+    if ymin<0:
+        ymin+=M
+    if ymax<0:
+        ymax+=M
+    cnt=(ymax-ymin)//M
+    ans+=cnt
+print(int(ans))
+
+
+"""
+0.2 0.8 1.1
+3
+"""
