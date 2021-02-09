@@ -1,27 +1,19 @@
-X,Y,R=map(float,input().split())
-M=10**4
-X=int(X*M)
-Y=int(Y*M)
-R=int(R*M)
+from math import sqrt,ceil,floor
+from decimal import Decimal as D
+X,Y,R=[D(a) for a in input().split()]
 ans=0
-xmin=(X-R)//M*M
-xmax=(X+R)//M*M
-if xmin<0:
-    xmin+=M
-if xmax<0:
-    xmax+=M
+""" xの範囲を求める """
+xmin=ceil(X-R)
+xmax=floor(X+R)
+""" 円内部のx=M*c(cは整数)すべてについてyの範囲を求めてカウントしていく """
 R2=R**2
-for x in range(xmin,xmax+1,10**4):
-    y=(R2-(X-x)**2)**(1/2)
-    ymin=(Y-y)//M*M
-    ymax=(Y+y)//M*M
-    if ymin<0:
-        ymin+=M
-    if ymax<0:
-        ymax+=M
-    cnt=(ymax-ymin)//M
+for x in range(xmin,xmax+1):
+    y=(R2-(X-x)**2).sqrt()
+    ymin=ceil(Y-y)
+    ymax=floor(Y+y)
+    cnt=ymax-ymin+1
     ans+=cnt
-print(int(ans))
+print(ans)
 
 
 """
