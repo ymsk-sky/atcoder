@@ -1,26 +1,9 @@
-a,b,w=map(int,input().split())  # 120 150 2
-w*=1000  # 2000
-a_ans=w//a  # 16
-a_mod=w%a  # 80
-if a_mod/a_ans>b:
-    if a_mod==0:
-        pass
-    else:
-        print('UNSATISFIABLE')
-        exit()
-b_ans=w//b  # 13
-b_mod=w%b  # 50
-if b-(a-b_mod)/b_ans>=a:
-    if b_mod==0:
-        pass
-    else:
-        b_ans+=1
-else:
-    print('UNSATISFIABLE')
-    exit()
-print(b_ans,a_ans)
-
-"""
-120 150 2
-14 16
-"""
+a,b,w=map(int,input().split())
+w*=1000
+max_=0
+min_=float('inf')
+for n in range(1,10**6+1):
+    if a*n<=w<=b*n:
+        min_=min(min_,n)
+        max_=max(max_,n)
+print('{} {}'.format(min_,max_) if max_!=0 else 'UNSATISFIABLE')
