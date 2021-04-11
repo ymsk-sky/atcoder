@@ -1,34 +1,102 @@
-from itertools import permutations
+N = 128
+s = "0123456789ABCDEFGHIJKLMNOPQRTSUVWXYZ"
+word = [['' for i in range(N)] for j in range(128)]
+digit = [0 for i in range(len(s))]
+l = [0 for i in range(len(s))]
+ok = [False for i in range(10)]
+ii = 0
+jj = 0
+carry = 0
+solution = 0
+
+
+def found():
+    global solution
+    solution += 1
+    #print("\n解 %d" % solution)
+    for i in range(imax):
+        # if (i == imax-1):
+        #     print("-"*jmax)
+        for j in range(jmax):
+            k = jmax-1-j
+            c = word[i][k]
+            if (c == ''):
+                #print(" ", end="")
+                pass
+            else:
+                print("%d" % digit[s.index(c)], end='')
+        print("")
+    exit()
+
+
+def tr(sum):
+    global ii, jj
+    w = word[ii][jj]
+    c = 0 if w == '' else s.index(w)
+    if (ii < imax-1):
+        ii += 1
+        d = digit[c]
+        if (d < 0):
+            d = l[c]
+            while(d <= 9):
+                if (ok[d]):
+                    digit[c] = d
+                    ok[d] = False
+                    tr(sum+d)
+                    ok[d] = True
+                d += 1
+            digit[c] = -1
+        else:
+            tr(sum+d)
+        ii -= 1
+    else:
+        jj += 1
+        ii = 0
+        carry, d = divmod(sum, 10)
+        if (digit[c] == d):
+            if (jj < jmax):
+                tr(carry)
+            elif (carry == 0):
+                found()
+        else:
+            if (digit[c] < 0 and ok[d] and d >= l[c]):
+                digit[c] = d
+                ok[d] = False
+                if (jj < jmax):
+                    tr(carry)
+                elif (carry == 0):
+                    found()
+                digit[c] = -1
+                ok[d] = True
+        jj -= 1
+        ii = imax-1
+
+
 s1=input()
 s2=input()
 s3=input()
-s=list(set(s1+s2+s3))
-l=len(s)
-if l>10:
-    print('UNSOLVABLE')
-    exit()
-for p in permutations(range(10),l):
-    d1=s1
-    d2=s2
-    d3=s3
-    f=1
-    for val, dig in zip(s,p):
-        d1=d1.replace(val,str(dig))
-        d2=d2.replace(val,str(dig))
-        d3=d3.replace(val,str(dig))
-        if d1[0]=='0' or d2[0]=='0' or d3[0]=='0':
-            f=0
-            break
-    if f:
-        if int(d1)+int(d2)==int(d3):
-            print(d1)
-            print(d2)
-            print(d3)
-            exit()
-print('UNSOLVABLE')
+argv = [s1,s2,s3]
+imax = len(argv)
+jmax = max(map(len, argv))
 
-"""
-p
-q
-p
-"""
+for i in range(imax):
+    argv[i] = argv[i].upper()
+    l[s.index(argv[i][0])] = 1
+    a = argv[i][-1::-1]
+    for j in range(len(a)):
+        word[i][j] = a[j]
+        c = word[i][j]
+        if (c.isalpha()):
+            digit[s.index(c)] = -1
+        elif (c.isdigit()):
+            digit[s.index(c)] = int(c)
+        else:
+            print("Invalid parameter.")
+            exit(1)
+
+for i in range(10):
+    ok[i] = True
+tr(0)
+if (solution == 0):
+    print("UNSOLVABLE")
+exit(0)
