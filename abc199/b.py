@@ -1,0 +1,6 @@
+n=int(input())
+al=list(map(int,input().split()))
+bl=list(map(int,input().split()))
+a=max(al)
+b=min(bl)
+print(b-a+1 if a<=b else 0)
