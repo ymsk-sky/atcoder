@@ -1,3 +1,8 @@
+"""
+BFS(幅優先探索)で街cから各街への最短距離を求める(dictリスト).
+街cから街dまでの最短距離はdict[c][d]となる.
+これを記憶していき,計算していた場合はそれを再利用.
+"""
 from collections import deque
 n,q=map(int,input().split())
 abl=[list(map(int,input().split())) for _ in range(n-1)]
