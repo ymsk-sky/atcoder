@@ -7,7 +7,6 @@ for _ in range(N):
     Tl.append(T)
     Kl.append(K)
     Al.append(A)
-print(Al)
 ans = 0
 fin=set([])
 
