@@ -1,33 +1,18 @@
 n, m = map(int, input().split())
 al = list(map(int, input().split()))
 
-p = [[0] * m for _ in range(n)]
-for i in range(n):
-    a = al[i]
-    for j in range(m):
-        p[i][j] = (j + 1) * a
+INF = float("inf")
 
-bl = [[a, i] for i, a in enumerate(al)]
-bl.sort(reverse=True)
+# dp[i][j]: i番目まででj個選んだ時の最大値
+dp = [[-INF] * (m + 1) for _ in range(n + 1)]
+dp[1][1] = al[0]
 
-ans = -float("inf")
+for i in range(1, n + 1):
+    a = al[i - 1]
+    for j in range(1, m + 1):
+        if j == 1:
+            dp[i][j] = max(dp[i - 1][j], a)
+        else:
+            dp[i][j] = max(dp[i][j], dp[i - 1][j], dp[i - 1][j - 1] + a * j)
 
-for i in range(n - m + 1):
-    tmp = 0
-    cl = bl[i:i + m]
-    cl.sort(key=lambda a: a[1])
-    for j, (a, i) in enumerate(cl):
-        tmp += p[i][j]
-    ans = max(ans, tmp)
-
-print(ans)
-
-"""
-   1    2    3    4
--3 1 -4 1 -5 9 -2 6 -5 3
-[9, 6, 3, 1, 1, -2, -3, -4, -5, -5]
-
-1+18+18+12
-1+2+27+24
-54
-"""
+print(max(dp[-1]))
