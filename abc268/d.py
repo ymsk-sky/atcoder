@@ -1,3 +1,13 @@
+"""
+1. 作成できる文字列をすべて作成しリストを作成
+2. ソートしておく
+3. tlをひとつずつ見ていき1.で作成したリストにあるかを確認
+4. 3.の際, 二分探索で探すことでTLEを回避 O(M log N)
+5. 見つかった場合は, その有無のリストを持っておきインデックスをFalseに変更していく
+6. すべて探索した後, Trueのインデックスの文字列を出力
+7. 無ければ-1を出力
+"""
+
 from itertools import permutations
 n, m = map(int, input().split())
 sl = [input() for _ in range(n)]
@@ -17,22 +27,3 @@ if len(ans) == 0:
     print(-1)
 else:
     print(ans.pop())
-
-"""
-
-aa_a_a_a_a_a_a_a
-
-3 4
-a
-b
-c
-a_b_c
-a__b_c
-a_b__c
-b_a_c
-b_c_a
-c_a_b
-
-cba
-
-"""
