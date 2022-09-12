@@ -16,7 +16,7 @@ sl = [input() for _ in range(n)]
 tl = [input() for _ in range(m)]
 
 if n == 1:
-    if sl[0] in tl:
+    if sl[0] in tl or len(sl[0]) < 3:
         print(-1)
     else:
         print(sl[0])
@@ -31,7 +31,7 @@ def popcount(x):
     x = x + (x >> 32)
     return x & 0x0000007f
 
-f_min = max(0, n - 2)
+f_min = n - 2
 f_max = 16 - sum([len(s) for s in sl]) - 1
 
 l = []
@@ -58,8 +58,6 @@ for per in permutations(sl):
         l.append(tmp)
 
 l.sort()
-
-print(l)
 
 can = [True] * len(l)
 for t in tl:
