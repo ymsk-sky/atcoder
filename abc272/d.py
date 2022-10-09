@@ -3,30 +3,39 @@ from collections import deque
 n, m = map(int, input().split())
 
 """
-0<=x<=mに対してxの平方数を事前に計算
+(a, b) -> (a + i, b + j) の移動
+iをforで回して i**2 + j**2 = m なる整数jが存在するかを判定
 """
-hl = []
-for x in range(m + 1):
-    xh = x ** 0.5
-    if xh.is_integer():
-        hl.append([x, int(xh)])
+move = []
+for i in range(m + 1):
+    j = m - i ** 2
+    if j < 0:
+        # iは単調増加のため一旦jがマイナスになると以降すべてマイナスのため打ち切り
+        break
+    j **= 0.5
+    if int(j) == j:
+        j = int(j)
+        move.append([i, j])
+        move.append([i, -j])
+        move.append([-i, j])
+        move.append([-i, -j])
 
-INF = float("inf")
-ans = [[INF] * (n + 1) for _ in range(n + 1)]
+dist = [[-1] * n for _ in range(n)]
+dist[0][0] = 0
+
+def judge(x, y):
+    return 0 <= x < n and 0 <= y < n and dist[x][y] == -1
 
 q = deque()
-q.append([1, 1])
+q.append([0, 0])
+
 while q:
     i, j = q.popleft()
-    for x, xh in hl:
-        pass
+    for a, b in move:
+        k, l = i + a, j + b
+        if judge(k, l):
+            dist[k][l] = dist[i][j] + 1
+            q.append([k, l])
 
-
-for i in range(1, n + 1):
-    tmp = []
-    for j in range(1, n + 1):
-        if ans[i][j] == INF:
-            tmp.append(-1)
-        else:
-            tmp.append(ans[i][j])
-    print(*tmp)
+for d in dist:
+    print(*d)
