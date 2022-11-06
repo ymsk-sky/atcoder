@@ -1,43 +1,58 @@
+# rs[i]: i!
+rs = [1] * 101
+for i in range(100):
+    rs[i + 1] = rs[i] * (i + 1)
+
+def kth_permutation(n, k):
+    """
+    長さnの(1,2,...,n)を並び替えてできる順列を
+    辞書順で並べたときにk番目にくる順列を返す
+
+    Params
+    --------
+    n: int
+        順列の長さ
+    k: int
+        何番目か
+
+    Returns
+    --------
+    l: list
+        k番目の順列
+    """
+    s = [i for i in range(1, n + 1)]
+    l = []
+    for i in range(n):
+        a = rs[n - 1 - i]
+        j = k // a
+        k %= a
+        l.append(s[j])
+        s = s[:j] + s[j + 1:]
+    return l
+
+def id_of_permutation(l):
+    """
+    順列lが辞書順で何番目かを返す
+
+    Params
+    --------
+    l: list
+        (長さがnのとき1~nを並び替えてできる)順列
+    Returns
+    --------
+    k: int
+        何番目か
+    """
+    k = 0
+    while len(l) > 1:
+        a = len([m for m in l if m < l[0]])
+        k += a * rs[len(l) - 1]
+        l = l[1:]
+    return k
+
 n = int(input())
 pl = list(map(int, input().split()))
 
-r = [0] * (n + 1)
-r[0] = r[1] = 1
-for i in range(2, n + 1):
-    r[i] = r[i - 1] * i
-
-k = 0
-used = [0] * (n + 1)
-for i in range(1, n + 1):
-    p = pl[i - 1]
-    k += r[n - i] * (p - sum(used[:p]) - 1)
-    used[p] = 1
-k = 2020
-ans = []
-used = [0] * (n + 2)
-s = 0
-for i in range(n):
-    num = 0
-    while s + r[n - i - 1] <= k:
-        s += r[n - i - 1]
-        num += 1
-    # 前にnum個ある
-    tmp = 1
-    cnt = 0
-    while cnt < num:
-        if used[tmp] == 0:
-            cnt += 1
-        tmp += 1
-    ans.append(tmp)
-    used[tmp] = 1
+k = id_of_permutation(pl)
+ans = kth_permutation(n, k - 1)
 print(*ans)
-
-"""
-7
-3 6 1 7 5 4 2
-
-used = [0, 0, 0, 1, 0, 0, 1, 0, 0]
-2020
-720+720=1440
-s=1920
-"""
