@@ -1,24 +1,20 @@
-from itertools import product
-n=int(input())
-l=list(map(int,input().split()))
-ans=float('inf')
-for prd in product((0,1),repeat=n-1):
-    splited=[]
-    tmp=[]
-    for i,s in enumerate(prd+(0,)):
-        tmp.append(l[i])
-        if s==1:
-            splited.append(tmp)
-            tmp=[]
-    splited.append(tmp)
-    b=splited[0][0]
-    for v in splited[0][1:]:
-        b|=v
-    crt=b
-    for a in splited[1:]:
-        b=a[0]
-        for v in a[1:]:
-            b|=v
-        crt^=b
-    ans=min(ans,crt)
+n = int(input())
+al = list(map(int, input().split()))
+
+ans = float("inf")
+for l in range(1 << (n - 1)):
+    vl = []
+    v = al[0]
+    for i in range(n - 1):
+        if (l >> i) & 1:
+            vl.append(v)
+            v = al[i + 1]
+        else:
+            v |= al[i + 1]
+    vl.append(v)
+    tmp = vl[0]
+    for i in range(1, len(vl)):
+        tmp ^= vl[i]
+    ans = min(ans, tmp)
+
 print(ans)
