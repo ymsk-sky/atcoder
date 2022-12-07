@@ -1,16 +1,18 @@
-n,m=map(int,input().split())
-abcl=[list(map(int,input().split())) for _ in range(m)]
+n, m = map(int, input().split())
+INF = float("inf")
+dist = [[INF] * n for _ in range(n)]
+for _ in range(m):
+    a, b, c = map(int, input().split())
+    dist[a - 1][b - 1] = c
+for i in range(n):
+    dist[i][i] = 0
 
-dp=[[[0]*n for _ in range(n)] for _ in range(n)]  # dp[A-1][B-1][C-1]: A->BへのC以下を通っての最短時間
-
-def f(s,t,k):  # s->tへk以下の都市のみを通っての最短時間
-    if s==t: return 0
-    if dp[s-1][t-1][k-1]>0: return dp[s][t][k]
-    return 1
-
-ans=0
-for s in range(1,n+1):
-    for t in range(1,n+1):
-        for k in range(1,n+1):
-            ans+=f(s,t,k)
+ans = 0
+for k in range(n):
+    for s in range(n):
+        for t in range(n):
+            if dist[s][t] > dist[s][k] + dist[k][t]:
+                dist[s][t] = dist[s][k] + dist[k][t]
+            if dist[s][t] != INF:
+                ans += dist[s][t]
 print(ans)
