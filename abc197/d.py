@@ -1,19 +1,19 @@
-from math import sin,cos,pi
-n=int(input())
-x0,y0=map(int,input().split())
-xn,yn=map(int,input().split())
-# 中心点座標を求める
-xc=(x0+xn)/2
-yc=(y0+yn)/2
-d=((x0-xc)**2+(y0-yc)**2)**(1/2)  # 中心との距離
-deg=360/n  # ずらす角度
-#rad=-deg*pi/180
-x=cos(deg)*d
-y=sin(deg)*d
-print(x,y)
+from math import sin, cos, radians
 
-"""
-4
-1 1
-2 2
-"""
+n = int(input())
+x0, y0 = map(int, input().split())
+xh, yh = map(int, input().split())
+
+xc, yc = (x0 + xh)/2, (y0 + yh)/2  # 中心
+# 中心点分ずらす
+x0 -= xc
+y0 -= yc
+deg = 360 / n
+rad = radians(deg)  # 度->ラジアン
+
+x = x0*cos(rad) - y0*sin(rad)
+y = x0*sin(rad) + y0*cos(rad)
+# 中心点分戻す
+x += xc
+y += yc
+print(x, y)
