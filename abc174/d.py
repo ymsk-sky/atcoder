@@ -1,8 +1,13 @@
 n=int(input())
 cs=input()
-ss=sorted(cs)
-wr=0
-for x,y in zip(cs,ss):
-    if x=='W' and y=='R':
-        wr+=1
-print(wr)
+lw=0
+rr=cs.count('R')
+ans=max(lw,rr)
+for c in cs:
+    if c=='W':
+        lw+=1
+    else:  # c=='R'
+        rr-=1
+    tmp=max(lw,rr)
+    ans=min(ans,tmp)
+print(ans)
