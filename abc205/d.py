@@ -1,29 +1,27 @@
-from bisect import bisect_right
-n,q=map(int,input().split())
-al=list(map(int,input().split()))
-kl=[int(input()) for _ in range(q)]
-
-def sr(k,base):
-    ix=bisect_right(al,k)
-    if ix==0:
-        return 0
-    if k==base:
-        return sr(k+ix,base)
-    else:
-        return ix
-
-for k in kl:
-    p=sr(k,k)  # プラスする数
-    print(k+p)
-
+"""二分探索
+A=(A1,A2,...,AN)
+においてAi未満の「良い整数」は(Ai - i)個ある
+よって S(A1-1,A2-2,...,AN-N)とすると
+KがSのどの要素に入るかを二分探索で調べれば, どのAi以上A(i+1)未満かがわかる
 """
-5 5
-2 4 6 8 10
-1
-2
-3
-4
-5
+from bisect import bisect_left
 
-1 3 5 7 9
+n, q = map(int, input().split())
+al = list(map(int, input().split()))
+sl = [al[i] - (i + 1) for i in range(n)]
+kl = [int(input()) for _ in range(q)]
+for k in kl:
+    ix = bisect_left(sl, k)
+    if ix == 0:
+        print(k)
+    else:
+        # K未満,最大,使用不可の数字 + (K -)
+        print(al[ix - 1] + (k - sl[ix - 1]))
+"""
+K = 3: ix = 2
+1 2 3 4 5 6
+  2 3   o 6
+al = [2, 3, 6]
+sl = [1, 1, 3]
+3 + (3 - 1) = 5
 """
