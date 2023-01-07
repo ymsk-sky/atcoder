@@ -3,8 +3,8 @@ from collections import defaultdict
 class UnionFind():
     def __init__(self, n):
         self.n = n
-        self.root = [-1] * (n + 1)
-        self.rank = [0] * (n + 1)
+        self.root = [-1] * n
+        self.rank = [0] * n
 
     def find(self, x):
         if self.root[x] < 0:
@@ -42,6 +42,6 @@ class UnionFind():
 
     def group_members(self):
         group_members = defaultdict(list)
-        for member in range(self.n + 1):
+        for member in range(self.n):
             group_members[self.find(member)].append(member)
         return group_members
