@@ -11,29 +11,25 @@ for _ in range(t):
         u, v = u - 1, v - 1
         edges[u].append(v)
         edges[v].append(u)
-    # BFS
-    t_dist = [INF] * n  # for takahashi
-    a_dist = [INF] * n  # for aoki
-    t_dist[0] = a_dist[n - 1] = 0
-
-    que = deque([(0, n - 1)])
+    # vis[i][j]: Tがi, Aがjに行けるか
+    vis = [[0] * n for _ in range(n)]
+    vis[0][n - 1] = 1
+    que = deque([(0, 0, n - 1)])
     while que:
-        t_crt, a_crt = que.popleft()
-        for t_nxt in edges[t_crt]:
-            if t_dist[t_nxt] <= t_dist[t_crt] + 1:
-                continue
-            for a_nxt in edges[a_crt]:
-                if a_dist[a_nxt] <= a_dist[a_crt] + 1:
+        cost, crt_t, crt_a = que.popleft()
+
+        if crt_t == n - 1 and crt_a == 0:
+            print(cost)
+            break
+        
+        for nxt_t in edges[crt_t]:
+            for nxt_a in edges[crt_a]:
+                if cl[nxt_t] == cl[nxt_a]:
                     continue
-                if cl[t_nxt] == cl[a_nxt]:
+                if vis[nxt_t][nxt_a]:
                     continue
-                if t_nxt == n - 1 and a_nxt != 0:
-                    continue
-                if t_nxt != n - 1 and a_nxt == 0:
-                    continue
-                t_dist[t_nxt] = a_dist[a_nxt] = t_dist[t_crt] + 1
-                que.append((t_nxt, a_nxt))
-    if t_dist[n - 1] == a_dist[0] and t_dist[n - 1] != INF:
-        print(t_dist[n - 1])
+                vis[nxt_t][nxt_a] = 1
+                que.append((cost + 1, nxt_t, nxt_a))
     else:
         print(-1)
+
