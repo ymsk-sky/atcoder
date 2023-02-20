@@ -1,0 +1,5 @@
+n, m = map(int, input().split())
+al = list(map(int, input().split()))
+bl = list(map(int, input().split()))
+ans = sum([al[b - 1] for b in bl])
+print(ans)
