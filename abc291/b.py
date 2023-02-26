@@ -1,0 +1,5 @@
+n = int(input())
+xl = list(map(int, input().split()))
+xl.sort()
+ans = sum(xl[n:-n]) / (3*n)
+print(ans)
