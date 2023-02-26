@@ -1,4 +1,8 @@
 @echo off
+IF "%1"=="" (
+    echo NO ARG
+    EXIT /B
+)
 IF Exist %1 EXIT /B
 mkdir %1
 cd %1
