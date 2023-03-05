@@ -1,29 +1,26 @@
 from collections import deque
 
 n, m = map(int, input().split())
-edges = [set() for _ in range(n)]  # 有向辺
+edges = [[] for _ in range(n)]  # 有向辺
 for _ in range(m):
     u, v = map(int, input().split())
     u, v = u - 1, v - 1
-    edges[u].add(v)
+    edges[u].append(v)
 
 ans = 0
 for i in range(n):
-    que = deque()
-    for j in edges[i]:
-        que.append(j)
-
+    f = [0] * n  # 到達可能か
+    f[i] = 1
+    que = deque([i])
     while que:
-        j = que.popleft()
-        for k in edges[j]:
-            # i->j and j->k
-            if k in edges[i] or k == i:
+        crt = que.popleft()
+        for nxt in edges[crt]:
+            if f[nxt]:
                 continue
-            # i->kが無い
-            edges[i].add(k)
-            que.append(k)
+            f[nxt] = 1
+            que.append(nxt)
             ans += 1
-print(ans)
+print(ans - m)
 
 
 """
