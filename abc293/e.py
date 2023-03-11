@@ -1,20 +1,9 @@
 a, x, m = map(int, input().split())
-
-# a**n % mod を計算 O(log(n))
-def modpow(a, n, mod):
-    res = 1
-    while n > 0:
-        if n & 1:
-            res = res * a % mod
-        a = a * a % mod
-        n >>= 1
-    return res
-
-# modを法とした逆元
-def inv(n, mod):
-    return pow(n, mod - 2, mod)
-
-print((modpow(a, x, m) - 1)*inv(a - 1, m)%m)
+if a == 1:
+    print(x%m)
+else:
+    ans = (pow(a, x, m*(a - 1)) - 1) // (a - 1)
+    print(ans)
 
 """
 1<=a,m<=10*9
