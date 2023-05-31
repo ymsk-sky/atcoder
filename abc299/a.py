@@ -1,0 +1,6 @@
+n = int(input())
+s = input()
+l = s.find("|")
+r = s.rfind("|")
+c = s.find("*")
+print("in" if l < c < r else "out")
