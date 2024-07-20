@@ -4,7 +4,7 @@ def encode(l):
     """いい感じに文字を圧縮する
     abc -> abc
     azd -> acb
-        a: 0, z:25, d: 3
+        a: 0, z:25, d: 3 -> a:0, z: 2, d: 1
     """
     d = {c: i for i, c in enumerate(sorted(set(l)))}
     return "".join([chr(d[c] + 97) for c in l])
