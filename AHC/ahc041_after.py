@@ -1,6 +1,6 @@
 """AHC041 A - Christmas Tree Cutting
 after contest
-未完了の頂点の内, 美しさが小さい順にDFSのみ
+未完了の頂点の内, DFSして木を作った際に最も(木のスコア/木の頂点数)が良いものを採用していく
 """
 
 import sys
@@ -21,8 +21,6 @@ def solve() -> None:
         edges[v].append(u)
     xyl = [list(map(int, input().split())) for _ in range(N)]  # xyl[i]: 頂点iの座標(x, y)
 
-    ul = sorted(range(N), key=lambda i: al[i])
-
     pl = [-1] * N
     hl = [-1] * N
     def dfs(crt: int) -> None:
@@ -33,11 +31,50 @@ def solve() -> None:
             pl[nxt] = crt
             if hl[nxt] < H:
                 dfs(nxt)
-    for u in ul:
-        if hl[u] > -1:
-            continue
-        hl[u] = 0
-        dfs(u)
+
+    use = []
+    def dfs_confirm(crt: int) -> None:
+        use.append(crt)
+        for nxt in edges[crt]:
+            if hl[nxt] > -1:
+                continue
+            hl[nxt] = hl[crt] + 1
+            pl[nxt] = crt
+            if hl[nxt] < H:
+                dfs_confirm(nxt)
+
+    def calc_tree_score(ul: list) -> int:
+        res = 0
+        for u in ul:
+            res += (hl[u] + 1) * al[u]
+        return res
+
+    cnt = 0  # tmp
+    while 1:
+        ul = []
+        scores = []
+        for u in range(N):
+            if hl[u] > -1:
+                continue
+            use = []
+            ul.append(u)
+            hl[u] = 0
+            dfs_confirm(u)
+            score = calc_tree_score(use)
+            num = len(use)
+            scores.append(score / num)
+            for i in use:
+                pl[i] = -1
+                hl[i] = -1
+        if cnt == 0 and len(ul) != N:
+            # TODO: 1回目の確認なのにulにすべての頂点が入っていない
+            raise Exception("??????????????")
+        if len(ul) == 0:
+            break
+        U = ul[max(range(len(scores)), key=lambda i: scores[i])]
+        hl[U] = 0
+        dfs(U)
+        cnt += 1  # tmp
 
     print(*pl)
 
