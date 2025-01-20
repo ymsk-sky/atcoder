@@ -5,7 +5,7 @@ after contest
 
 import sys
 
-sys.setrecursionlimit(10**7)
+sys.setrecursionlimit(10**8)
 
 def input() -> str:
     return sys.stdin.readline().strip()
@@ -19,6 +19,7 @@ def solve() -> None:
         u, v = map(int, input().split())
         edges[u].append(v)
         edges[v].append(u)
+    edges = [sorted(e, key=lambda i: al[i]) for e in edges]
     xyl = [list(map(int, input().split())) for _ in range(N)]  # xyl[i]: 頂点iの座標(x, y)
 
     pl = [-1] * N
@@ -34,12 +35,12 @@ def solve() -> None:
 
     use = []
     def dfs_confirm(crt: int) -> None:
-        use.append(crt)
         for nxt in edges[crt]:
             if hl[nxt] > -1:
                 continue
             hl[nxt] = hl[crt] + 1
             pl[nxt] = crt
+            use.append(nxt)
             if hl[nxt] < H:
                 dfs_confirm(nxt)
 
@@ -49,14 +50,13 @@ def solve() -> None:
             res += (hl[u] + 1) * al[u]
         return res
 
-    cnt = 0  # tmp
     while 1:
         ul = []
         scores = []
         for u in range(N):
             if hl[u] > -1:
                 continue
-            use = []
+            use = [u]
             ul.append(u)
             hl[u] = 0
             dfs_confirm(u)
@@ -66,16 +66,11 @@ def solve() -> None:
             for i in use:
                 pl[i] = -1
                 hl[i] = -1
-        if cnt == 0 and len(ul) != N:
-            # TODO: 1回目の確認なのにulにすべての頂点が入っていない
-            raise Exception("??????????????")
         if len(ul) == 0:
             break
         U = ul[max(range(len(scores)), key=lambda i: scores[i])]
         hl[U] = 0
         dfs(U)
-        cnt += 1  # tmp
-
     print(*pl)
 
 
