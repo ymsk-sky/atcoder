@@ -41,6 +41,7 @@ def reverse_dir(d: str) -> str:
     return "L"
 
 def get_d(p: int, q: int) -> str:
+    """移動(p, q)の値から方向文字列を返す"""
     if p == 0:
         return " RL"[q]
     return " DU"[p]
@@ -90,7 +91,42 @@ def solve() -> None:
                             dist[u][v] = dist[i][j] + 1
                             que.append((u, v))
                         break
-        return dist[gi][gj], [("M", "?")]
+        res = dist[gi][gj]
+
+        # 経路復元してそのときの行動列を生成
+        l = []
+        i, j = gi, gj
+        for _ in range(res):
+            yet = True
+            # 移動Mでの行動だったか
+            for p, q in ((0, 1), (0, -1), (1, 0), (-1, 0)):
+                u, v = i + p, j + q
+                if 0 > u or u >= N or 0 > v or v >= N:
+                    continue
+                if dist[i][j] - 1 == dist[u][v]:
+                    d = reverse_dir(get_d(p, q))
+                    l.append(("M", d))
+                    yet = False
+                    i, j = u, v
+                    break
+            # 滑走Sでの行動だったか
+            for p, q in ((0, 1), (0, -1), (1, 0), (-1, 0)):
+                if not yet:
+                    break
+                # 滑走できる場合のみ確認
+                _u, _v = i - p, j - q
+                if 0 > _u or _u >= N or 0 > _v or _v >= N or maze[_u][_v] == BLOCK:
+                    for x in range(1, N + 1):
+                        u, v = i + x * p, j + x * q
+                        if 0 > u or u >= N or 0 > v or v >= N or maze[u][v] == BLOCK:
+                            break
+                        if dist[i][j] - 1 == dist[u][v]:
+                            d = reverse_dir(get_d(p, q))
+                            l.append(("S", d))
+                            yet = False
+                            i, j = u, v
+                            break
+        return res, l[::-1]
 
     results = []
     # 移動前に壁を仮設置して、改善された場合のみ採用していく
@@ -106,6 +142,7 @@ def solve() -> None:
             tmp, _ = bfs(si, sj, gi, gj)
             score_crt += tmp
 
+        res_ready = []
         for p, q in ((0, 1), (0, -1), (1, 0), (-1, 0)):
             si, sj = goals[idx]
             u, v = si + p, sj + q
@@ -122,13 +159,20 @@ def solve() -> None:
                 if jdx == idx:
                     l = l_tmp[:]
 
+            maze[u][v] = 0  # 元に戻しておく
             if score_tmp < score_crt:
-                # 採用
-                results.append(("A", get_d(p, q)))
-                results.extend(l)
+                # 採用準備
+                res_ready = [("A", get_d(p, q))] + l[:]
+                score_crt = score_tmp
+                uv = (u, v)
             else:
                 # 不採用
-                maze[u][v] = 0  # 元に戻す
+                _, l = bfs(si, sj, gi, gj)
+                res_ready = l[:]
+                uv = None
+        results.extend(res_ready)
+        if uv is not None:
+            maze[u][v] = BLOCK
 
         fin_time = time()
 
