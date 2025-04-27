@@ -13,7 +13,7 @@ from collections import deque
 from time import time
 
 program_start_ts = time()
-
+sys.setrecursionlimit(10**7)
 
 LIMIT_TIME = 1.8  # この値[s]を超えると処理終了
 C = 1.0  # 補正値: 処理時間*Cを考慮(C>=1.0)
@@ -52,11 +52,11 @@ def solve() -> None:
 
     # 入力受付
     N, M = map(int, input().split())  # N=20, M=40 固定
-    # 目的地は全て異なる
-    goals = [list(map(int, input().split())) for _ in range(M)]
+    goals = [list(map(int, input().split())) for _ in range(M)]  # 目的地は全て異なる
 
     maze = [[0] * N for _ in range(N)]  # マスの現在の状態
     for i, j in goals:
+        # 到着予定地にはブロックを置かないように管理
         maze[i][j] = GOAL
 
     def bfs(si: int, sj: int, gi: int, gj: int) -> tuple[int, list]:
@@ -86,7 +86,7 @@ def solve() -> None:
                 for x in range(1, N + 1):
                     u, v = i + x * p, j + x * q
                     if 0 > u or u >= N or 0 > v or v >= N or maze[u][v] == BLOCK:
-                        u, v  = i + (x - 1) * p, j + (x - 1) * q
+                        u, v = i + (x - 1) * p, j + (x - 1) * q
                         if dist[u][v] > dist[i][j] + 1:
                             dist[u][v] = dist[i][j] + 1
                             que.append((u, v))
@@ -95,25 +95,24 @@ def solve() -> None:
 
         # 経路復元してそのときの行動列を生成
         l = []
-        i, j = gi, gj
-        for _ in range(res):
-            yet = True
-            # 移動Mでの行動だったか
+        fin = [[False] * N for _ in range(N)]
+        def dfs(i: int, j: int) -> bool:
+            if i == si and j == sj:
+                return True
+            if fin[i][j]:
+                return False
+            # 移動M
             for p, q in ((0, 1), (0, -1), (1, 0), (-1, 0)):
                 u, v = i + p, j + q
                 if 0 > u or u >= N or 0 > v or v >= N:
                     continue
                 if dist[i][j] - 1 == dist[u][v]:
-                    d = reverse_dir(get_d(p, q))
-                    l.append(("M", d))
-                    yet = False
-                    i, j = u, v
-                    break
-            # 滑走Sでの行動だったか
+                    l.append(("M", reverse_dir(get_d(p, q))))
+                    if dfs(u, v):
+                        return True
+                    l.pop()
+            # 滑走S
             for p, q in ((0, 1), (0, -1), (1, 0), (-1, 0)):
-                if not yet:
-                    break
-                # 滑走できる場合のみ確認
                 _u, _v = i - p, j - q
                 if 0 > _u or _u >= N or 0 > _v or _v >= N or maze[_u][_v] == BLOCK:
                     for x in range(1, N + 1):
@@ -121,11 +120,13 @@ def solve() -> None:
                         if 0 > u or u >= N or 0 > v or v >= N or maze[u][v] == BLOCK:
                             break
                         if dist[i][j] - 1 == dist[u][v]:
-                            d = reverse_dir(get_d(p, q))
-                            l.append(("S", d))
-                            yet = False
-                            i, j = u, v
-                            break
+                            l.append(("S", reverse_dir(get_d(p, q))))
+                            if dfs(u, v):
+                                return True
+                            l.pop()
+            fin[i][j] = True
+            return False
+        dfs(gi, gj)
         return res, l[::-1]
 
     results = []
@@ -139,16 +140,16 @@ def solve() -> None:
         for jdx in range(idx, M - 1):
             si, sj = goals[jdx]
             gi, gj = goals[jdx + 1]
-            tmp, _ = bfs(si, sj, gi, gj)
+            tmp, l_tmp = bfs(si, sj, gi, gj)
             score_crt += tmp
+            if jdx == idx:
+                res_ready = l_tmp[:]
 
-        res_ready = []
         for p, q in ((0, 1), (0, -1), (1, 0), (-1, 0)):
             si, sj = goals[idx]
             u, v = si + p, sj + q
-            if 0 > u or u >= N or 0 > v or v >= N:
-                continue
-            if maze[u][v] == BLOCK or maze[u][v] == GOAL:
+            # 対象がマス外, 既にブロック, 到達予定地の場合はスキップ
+            if 0 > u or u >= N or 0 > v or v >= N or maze[u][v] == BLOCK or maze[u][v] == GOAL:
                 continue
             maze[u][v] = BLOCK
             score_tmp = 1  # 変更A
@@ -158,6 +159,7 @@ def solve() -> None:
                 score_tmp += tmp
                 if jdx == idx:
                     l = l_tmp[:]
+                si, sj = gi, gj
 
             maze[u][v] = 0  # 元に戻しておく
             if score_tmp < score_crt:
@@ -167,11 +169,14 @@ def solve() -> None:
                 uv = (u, v)
             else:
                 # 不採用
+                si, sj = goals[idx]
+                gi, gj = goals[idx + 1]
                 _, l = bfs(si, sj, gi, gj)
                 res_ready = l[:]
                 uv = None
         results.extend(res_ready)
         if uv is not None:
+            u, v = uv
             maze[u][v] = BLOCK
 
         fin_time = time()
